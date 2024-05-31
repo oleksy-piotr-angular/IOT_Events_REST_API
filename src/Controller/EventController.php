@@ -9,20 +9,29 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class EventController extends AbstractFOSRestController
 {
-    #[Route('/event', name: 'app_event')]
-    public function index(): JsonResponse
-    {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/EventController.php',
-        ]);
-    }
-    #[Rest\Post('/post', name:"app_event_update")]
-    public function post()
-    {
-      return $this->json([
-        'message' => 'Welcome to your post controller!',
-        'path' => 'src/Controller/EventController.php',
+  #[Rest\Get('/events', name:"getEvents")]
+  public function getEventsAction() :JsonResponse
+  {
+    return $this->json([
+      'message' => 'Welcome to your get Events controller!',
+      'path' => 'src/Controller/EventController.php',
     ]);
-    }
+  }
+  #[Rest\Get('/events/{id}', name:"getEvent")]
+  public function getEventAction(int $id) :JsonResponse
+  {
+    return $this->json([
+      'message' => 'Welcome to your get Event controller!',
+      'path' => 'src/Controller/EventController.php',
+    ]);
+  }
+
+  #[Rest\Post('/events', name:"postEvent")]
+  public function postEventAction() :JsonResponse
+  {
+    return $this->json([
+      'message' => 'Welcome to your post controller!',
+      'path' => 'src/Controller/EventController.php',
+    ]);
+  }
 }
