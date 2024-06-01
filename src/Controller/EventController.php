@@ -15,11 +15,11 @@ class EventController extends AbstractFOSRestController
   {
     $json_data = json_decode($request->getContent(), true);
     $deviceId = $json_data['deviceId'];
-    $milliseconds = $json_data['eventDate'];
-    $eventDate = date("d/m/Y H:i:s", $milliseconds / 1000);
+    $eventDate = $json_data['eventDate'];
     $type = $json_data['type'];
     $evtData = $json_data['evtData'];
-    if (is_string($deviceId) && $eventDate && is_string(($type))) {
+
+    if (is_string($deviceId) && isValidTimeStamp($eventDate)  && is_string(($type))) {
       $data = [
         'deviceId' => $deviceId,
         'eventDate' => $eventDate,
@@ -48,7 +48,7 @@ class EventController extends AbstractFOSRestController
           return $this->view($data, statusCode: Response::HTTP_BAD_REQUEST);
         }
       } elseif ($type == 'doorUnlocked') {
-        if (date("d/m/Y H:i:s", $evtData['unlockDate'] / 1000)) {
+        if (isValidTimeStamp($evtData['unlockDate'])) {
           $data['evtData'] = $evtData;
           echo 'Event log and text message';
         } else {
@@ -63,13 +63,20 @@ class EventController extends AbstractFOSRestController
       return $this->view($data, statusCode: Response::HTTP_OK);
     }
 
+    if (!is_string($deviceId)) $data['deviceId'] = 'Should be a string';
+    if (!isValidTimeStamp($eventDate)) $data['eventDate'] = 'Should be a timestamp';
+    if (!is_string(($type))) $data['type'] = 'Should be a string';
+
     return $this->view(
-      [
-        'deviceId' => 'Should be a string',
-        'eventDate' => 'Should be a timestamp',
-        'type' => 'Should be a string'
-      ],
+      $data,
       statusCode: Response::HTTP_BAD_REQUEST
     );
   }
+}
+
+function isValidTimeStamp($timestamp)
+{
+  return (is_int($timestamp))
+    && ($timestamp <= PHP_INT_MAX)
+    && ($timestamp >= ~PHP_INT_MAX);
 }
