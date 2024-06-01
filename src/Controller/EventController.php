@@ -30,10 +30,9 @@ class EventController extends AbstractFOSRestController
           $data['evtData'] = $evtData;
           echo 'Event log, sending e-mail and text message';
         } else {
-          $data['evtData'] = [
-            "reasonCode" => 'Should be an integer',
-            "reasonText" => 'Should be a string'
-          ];
+          if (!is_int($evtData['reasonCode'])) $data['evtData']['reasonCode'] = 'Should be an integer';
+          if (!is_string($evtData['reasonText'])) $data['evtData']['reasonText'] = 'Should be a string';
+
           return $this->view($data, statusCode: Response::HTTP_BAD_REQUEST);
         }
       } elseif ($type == 'temperatureExceeded') {
@@ -41,10 +40,9 @@ class EventController extends AbstractFOSRestController
           $data['evtData'] = $evtData;
           echo 'Event log and sending a REST request';
         } else {
-          $data['evtData'] = [
-            "temp" => 'Should be a float',
-            "treshold" => 'Should be a float'
-          ];
+          if (!is_float($evtData['temp'])) $data['evtData']['temp'] = 'Should be a float';
+          if (!is_float($evtData['treshold'])) $data['evtData']['treshold'] = 'Should be a float';
+
           return $this->view($data, statusCode: Response::HTTP_BAD_REQUEST);
         }
       } elseif ($type == 'doorUnlocked') {
