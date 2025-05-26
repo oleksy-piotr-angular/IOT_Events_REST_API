@@ -1,35 +1,42 @@
 #IOT_Events_REST_API
 
-Przetwarzanie informacji o zdarzeniach pochodzących z urządzeń IoT.
-System przyjmuje informacje o pojedynczych zdarzeniach za pomocą interface'u REST.
+Processing information about events from IoT devices.
 
-Dla każdego wchodzącego do systemu zdarzenia, istnieje potrzeba
-• walidacji składni konkretnego zdarzenia przy założeniu, że wszystkie pola w każdym
-typie zdarzenia są wymagane.
-• podjęcia różnych akcji dodatkowych z zależności od rodzaju zdarzenia.
-Możliwe akcje do wywołania w systemie:
-o zalogowanie zdarzenia (wysłanie do logu),
-o wysłania SMS lub email,
-o wysłania żądania REST do zewnętrznego systemu.
-Odpowiednio dla:
-• deviceMalfunction: zalogowanie i wysłanie email oraz sms
-• temperatureExceeded: zalogowanie oraz wysłanie żądania REST
-• doorUnlocked: zalogowanie i wysyłanie sms.
-Należy zaprojektować i zaimplementować we frameworku Symfony rozwiązanie, które
-obsłuży powyższe wymagania.
-W ramach obsługi poszczególnych akcji dodatkowych nie ma potrzeby implementować
-właściwej logiki (obsługa zapisu do logu, wysłanie SMS itd.), wystarczy w danym
-miejscu logiki akcji print z systemu.
+The system accepts information about individual events using the REST interface.
+
+For each event entering the system, there is a need to
+• validate the syntax of a specific event, assuming that all fields in each
+event type are required.
+• take various additional actions depending on the type of event.
+Possible actions to be invoked in the system:
+o log the event (send to the log),
+o send an SMS or email,
+o send a REST request to an external system.
+Respectively for:
+• deviceMalfunction: log in and send an email and SMS
+• temperatureExceeded: log in and send a REST request
+• doorUnlocked: log in and send an SMS.
+A solution should be designed and implemented in the Symfony framework that
+will handle the above requirements.
+As part of handling individual additional actions, there is no need to implement
+the appropriate logic (handling writing to the log, sending an SMS, etc.), it is 
+enough to implement the print action logic from the system in a given place.
 
 ---
 
-System przetestowany ręcznie w aplikacji POSTMAN wysyłając metodą POST z body zawierającym JSON dla każdego typu Eventu.
-Dane testowe z JSON zostały wzięte z zadania 2.
-U mnie zdarzenia są wysyłane na adres:
+The system was tested manually in the POSTMAN application by sending the POST method 
+with a body containing JSON for each Event type.
+The test data from JSON was taken from task 2.
+In my case, events are sent to the address:
+
 "http://127.0.0.1:8000/api/event"
 
-Jeśli w zapytaniu użyto poprawnego typu danych, w odpowiedzi otrzymywana jest notka (wysłana argumentem "echo") gdzie zostanie przekazana dalsza informacja oraz JSON z całym zdarzeniem (Bez logiki, co zostało wspomniane w zadaniu).
+If the correct data type was used in the query, a note is received in response 
+(sent with the "echo" argument)where further information and JSON with the entire 
+event will be passed (without logic, which was mentioned in the task).
 
-W razie niepoprawnego typu zwracany jest błąd z informacją jaki typ danych powinno zawierać podane pole.
+In the case of an incorrect type, an error is returned with information 
+about what type of data the given field should contain.
 
-NOTE: po sklonowaniu repo i zainstalowaniu zależności Composer "composer install" System startuje się w terminalu z folderu projektu komendą "symfony server:start"
+NOTE: after cloning the repo and installing the Composer dependency "composer install" 
+the System is started in the terminal from the project folder with the command "symfony server:start"
